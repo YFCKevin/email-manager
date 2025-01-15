@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <contextName>eventWeb</contextName>
+
+<!--    <property name="log.path" value="/opt/mailXpert" />-->
+    <property name="log.path" value="/Users/chenyifan/Documents/workspace-fan/mailXpert" />
+    <property name="log.name" value="mailXpert" />
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <jmxConfigurator/>
+
+    <!-- 输出到控制台 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.net.ubn" level="DEBUG" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
+
+    <!-- 输出到文件，每天生成日志 -->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/${log.name}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 只根据日期滚动日志，不使用 %i -->
+            <fileNamePattern>${log.path}/logback.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 日志文件保留30天 -->
+            <maxHistory>30</maxHistory>
+            <!-- 所有历史日志的总大小 -->
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="file"/>
+    </root>
+
+    <logger name="com.gurula" level="DEBUG" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
+</configuration>

@@ -1,0 +1,56 @@
+server:
+  port: 18888
+  servlet:
+    contextPath: /mailXpert
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${mail-username}
+    password: ${mail-password}
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+  security:
+    oauth2:
+      client:
+        registration:
+          google1:
+            client-id: ${google1-client-id}
+            client-secret: ${google1-client-secret}
+            redirect-uri: http://localhost:18888/mailXpert/login/oauth2/code/google1
+            scope:
+              - email
+              - profile
+              - https://www.googleapis.com/auth/gmail.readonly
+              - https://www.googleapis.com/auth/gmail.compose
+              - https://www.googleapis.com/auth/gmail.send
+          google2:
+            client-id: ${google2-client-id}
+            client-secret: ${google2-client-secret}
+            redirect-uri: http://localhost:18888/mailXpert/login/oauth2/code/google2
+            scope:
+              - email
+              - profile
+              - https://www.googleapis.com/auth/gmail.readonly
+              - https://www.googleapis.com/auth/gmail.compose
+              - https://www.googleapis.com/auth/gmail.send
+config:
+  geminiApiKey: ${gemini-api-key}
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: INFO
