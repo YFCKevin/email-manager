@@ -1,4 +1,4 @@
-package com.gurula.mailXpert;
+package com.gurula.mailXpert.utils;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

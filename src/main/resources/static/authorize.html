@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>授權頁面</title>
+    <script>
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    function displayResultMessage() {
+      const result = getQueryParam('result');
+      const messageDiv = document.getElementById('resultMessage');
+
+      if (result === 'failed') {
+        messageDiv.textContent = '授權失敗';
+        messageDiv.style.color = 'red';
+      } else if (result === 'success') {
+        messageDiv.textContent = '授權成功';
+        messageDiv.style.color = 'green';
+      } else {
+        messageDiv.textContent = '';
+      }
+    }
+
+    window.onload = displayResultMessage;
+  </script>
+</head>
+<body>
+<div id="resultMessage"></div>
+<br>
+<a href="oauth2/authorization/google">授權</a><br><br>
+</body>
+</html>

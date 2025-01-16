@@ -6,43 +6,41 @@ import org.springframework.stereotype.Component;
 @Component
 public class
 ConfigProperties {
-    @Value("${spring.security.oauth2.client.registration.google1.client-id}")
-    private String clientId1;
-    @Value("${spring.security.oauth2.client.registration.google1.client-secret}")
-    private String clientSecret1;
-    @Value("${spring.security.oauth2.client.registration.google1.redirect-uri}")
-    private String redirectUri1;
-    @Value("${spring.security.oauth2.client.registration.google2.client-id}")
-    private String clientId2;
-    @Value("${spring.security.oauth2.client.registration.google2.client-secret}")
-    private String clientSecret2;
-    @Value("${spring.security.oauth2.client.registration.google2.redirect-uri}")
-    private String redirectUri2;
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String clientId;
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
+    private String clientSecret;
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    private String redirectUri;
     @Value("${spring.data.mongodb.uri}")
     public String mongodbUri;
+    @Value("${config.apiKey}")
+    public String openaiApiKey;
+    @Value("${config.globalDomain}")
+    public String globalDomain;
 
-    public String getClientId1() {
-        return clientId1;
+    public String getClientId() {
+        return clientId;
     }
 
-    public String getClientSecret1() {
-        return clientSecret1;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
-    public String getRedirectUri1() {
-        return redirectUri1;
+    public String getClientSecret() {
+        return clientSecret;
     }
 
-    public String getClientId2() {
-        return clientId2;
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 
-    public String getClientSecret2() {
-        return clientSecret2;
+    public String getRedirectUri() {
+        return redirectUri;
     }
 
-    public String getRedirectUri2() {
-        return redirectUri2;
+    public void setRedirectUri(String redirectUri) {
+        this.redirectUri = redirectUri;
     }
 
     public String getMongodbUri() {
@@ -53,27 +51,19 @@ ConfigProperties {
         this.mongodbUri = mongodbUri;
     }
 
-    public void setClientId1(String clientId1) {
-        this.clientId1 = clientId1;
+    public String getOpenaiApiKey() {
+        return openaiApiKey;
     }
 
-    public void setClientSecret1(String clientSecret1) {
-        this.clientSecret1 = clientSecret1;
+    public void setOpenaiApiKey(String openaiApiKey) {
+        this.openaiApiKey = openaiApiKey;
     }
 
-    public void setRedirectUri1(String redirectUri1) {
-        this.redirectUri1 = redirectUri1;
+    public String getGlobalDomain() {
+        return globalDomain;
     }
 
-    public void setClientId2(String clientId2) {
-        this.clientId2 = clientId2;
-    }
-
-    public void setClientSecret2(String clientSecret2) {
-        this.clientSecret2 = clientSecret2;
-    }
-
-    public void setRedirectUri2(String redirectUri2) {
-        this.redirectUri2 = redirectUri2;
+    public void setGlobalDomain(String globalDomain) {
+        this.globalDomain = globalDomain;
     }
 }

@@ -1,5 +1,6 @@
 package com.gurula.mailXpert.oauth2;
 
+import com.gurula.mailXpert.security.ConfigProperties;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,14 +25,15 @@ public class OauthLoginSuccessHandler implements AuthenticationSuccessHandler {
     protected Logger logger = LoggerFactory.getLogger(OauthLoginSuccessHandler.class);
     private final UserService userService;
     private final OAuthTokenRepository oauthTokenRepository;
-
+    private final ConfigProperties configProperties;
     @Autowired
     @Lazy
     private OAuth2AuthorizedClientService authorizedClientService;
 
-    public OauthLoginSuccessHandler(UserService userService, OAuthTokenRepository oauthTokenRepository) {
+    public OauthLoginSuccessHandler(UserService userService, OAuthTokenRepository oauthTokenRepository, ConfigProperties configProperties) {
         this.userService = userService;
         this.oauthTokenRepository = oauthTokenRepository;
+        this.configProperties = configProperties;
     }
 
     @Override
@@ -66,8 +68,8 @@ public class OauthLoginSuccessHandler implements AuthenticationSuccessHandler {
                 } else {
                     System.out.println("沒有返回 refresh_token");
                 }
-
                 saveOAuthToken(oauthUser.getEmail(), oauthUser.getOauth2ClientName(), tokenValue, refreshToken != null ? refreshToken.getTokenValue() : null);
+                response.sendRedirect(configProperties.getGlobalDomain() + "authorize.html?result=success");
             }
         }
     }
@@ -75,21 +77,21 @@ public class OauthLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private void saveOAuthToken(String userId, String oauth2ClientName, String accessToken, String refreshToken) {
         Optional<OAuthToken> existingToken = oauthTokenRepository.findByUserIdAndOauth2ClientName(userId, oauth2ClientName);
+        final OAuthToken oAuthToken;
         if (existingToken.isPresent()) {
-            final OAuthToken oAuthToken = existingToken.get();
-            if (!accessToken.equals(oAuthToken.getAccessToken())) {
-                oAuthToken.setAccessToken(accessToken);
+            oAuthToken = existingToken.get();
+            if (!accessToken.equals(oAuthToken.getAccessToken()) && refreshToken != null) {
                 oAuthToken.setRefreshToken(refreshToken);
-                oauthTokenRepository.save(oAuthToken);
             }
+            oAuthToken.setAccessToken(accessToken);
         } else {
-            final OAuthToken oAuthToken = new OAuthToken();
+            oAuthToken = new OAuthToken();
             oAuthToken.setUserId(userId);
             oAuthToken.setOauth2ClientName(oauth2ClientName);
             oAuthToken.setAccessToken(accessToken);
             oAuthToken.setRefreshToken(refreshToken);
-            oAuthToken.setTokenExpiry(System.currentTimeMillis() + (365L * 24 * 60 * 60 * 1000));   // 365天
-            oauthTokenRepository.save(oAuthToken);
         }
+        oAuthToken.setTokenExpiry(System.currentTimeMillis() + (60 * 60));   // １hr
+        oauthTokenRepository.save(oAuthToken);
     }
 }
